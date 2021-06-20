@@ -1,0 +1,18 @@
+<launch>
+  <arg name="cycle_move" default="false" />
+  <arg name="state_publisher" default="false" />
+  
+  <param name="robot_description" 
+	 command="$(find xacro)/xacro '$(find ur_description)/urdf/ur5_robot.urdf.xacro'" />
+
+  <node name="robot_sim" pkg="robot_sim" type="robot_sim_bringup" respawn="false" output="screen">
+    <param name="cycle_move" value="$(arg cycle_move)"/>
+  </node>
+
+  <node if="$(arg state_publisher)" pkg="robot_state_publisher" type="robot_state_publisher" 
+  	name="robot_state_publisher" output="screen" />
+
+  <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen"
+	args="-d $(find robot_sim)/config/ur5.rviz"/>
+
+</launch>
